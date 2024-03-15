@@ -1,40 +1,41 @@
-
-
-// const BAD_CONST = 100;       you must always annotate the type.
-// const bad_variable = 100;    you cant declare a 'let' in global scope
-const CONFIG:&str = "you can create global scoped const";
-
-
 fn main() {
-    const A: u16 = 60 * 10;
-    println!("A calculated in compile time: {A}");
+    let x = 2.000000000000001; // f64
+    let y: f32 = 3.000000000000001; // f32
 
-
-    let mut b: u32 = 60 * 10;
-    b += 1;
-    println!("b after increment: {b}");
-
-
-    let x = 5;           // x is not mutable
-    let x = x + 1;      // shadowing x
-    {
-        let x = x * 2;
-        println!("The value of x in the inner scope is: {x}");
-    }
-    println!("The value of x is: {x}");
+    println!("{x}");
+    println!("{y}");
     
-
-    println!("The config is: {CONFIG}");
+    let a:bool = true;
+    let b = true;
+    println!("{a}");
+    println!("{b}");
     
     
+    let c = "z";
+    let c = 'z';
+    let z: char = 'ℤ'; // with explicit type annotation
+    // Rust’s char type is four bytes in size and represents a Unicode Scalar Value, which means it can represent a lot more than just ASCII
+    let heart_eyed_cat = '😻';
     
-    let spaces = "   ";
-    let spaces = spaces.len();      // you can even change the type using shadowing
+    println!("{c}{z}{heart_eyed_cat}");
     
-    // let mut spaces2 = "   ";            // you can NOT change the type using mutation
-    // spaces2 = spaces2.len();            
+    
+
+    // in rust: Tuples have a fixed length: once declared, they cannot grow or shrink in size.
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+    let (x, y, z) = tup;
+    println!("{:?}", tup);
+
+    let five_hundred = tup.0;
+    let six_point_four = tup.1;
+    let one = tup.2;
+
+    println!("{x} | {y} | {z}");
+    println!("{five_hundred} | {six_point_four} | {one}");
 
 
-    println!("spaces: {spaces}");
-    
+
+    let ones = [1; 100];
+    println!("{:?}", ones);
+
 }
