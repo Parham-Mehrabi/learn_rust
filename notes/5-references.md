@@ -1,3 +1,93 @@
+# references
+
+
+there will be some key points that im just going to mention here and explore more in rust-code-examples,  
+you can either roll-back to the commit i created this to checkout main.rs,
+or use the code snippet at the end of the file
+
+
+1. references are not-owning pointers
+    - 
+2. Dereferencing a Pointer Accesses Its Data
+    - 
+    - you can use * to dereference a reference
+3. Avoids Simultaneous Aliasing and Mutation
+    - 
+    - data should never be aliased and mutated at the same time.
+
+4. References Change Permissions on Paths
+    - 
+    - The core idea behind the borrow checker is that variables have three kinds of __permissions__ on their data:
+        - write(W) -> data can be __copied__ to another location.
+        - read(R) ->  data can be __mutated__ in-place.
+        - own(O) ->  data can be __moved__ or __dropped__.
+
+5. The Borrow Checker Finds Permission Violations
+    - 
+    - The borrow checker looks for potentially unsafe involving references
+    - Rust uses these permissions in its borrow checker.
+
+6. Mutable References Provide Unique and Non-Owning Access to Data
+    - 
+    ```rust 
+    // there is two main difference between mutable and immutable references:
+    //
+    let mut v: Vec<i32> = vec![1, 2, 3];
+    let num: &i32 = &v[2];
+    println!("Third element is {}", *num);
+    v.push(4);
+    // above num is immutable but below is mutable
+    let mut v: Vec<i32> = vec![1, 2, 3];
+    let num: &mut i32 = &mut v[2];
+    *num += 1;
+    println!("Third element is {}", *num);
+    println!("Vector is now {:?}", v);
+    // compared to when num was immutable 
+    // 1. when num was immutable reference, v still had R permission 
+    //      now that num is mutable reference, v has no permission at all ---
+    // 
+    // 2. when num was immutable reference, the path *num had only R permission
+    //      now that num is mutable reference, *num also gain W permission too
+    // 
+    //                        v   ->  ---                                                    v   ->  R--
+    // it is now like this:   num ->  RO-     but when it was mutable reference, it was:     num ->  RO-
+    //                       *num ->  RW-                                                   *num ->  R--  
+    // 
+    ```
+    - When num was an immutable reference, v still had the R permission. but later that num is a mutable reference, v has lost all permissions while num is in use.
+    - When num was an immutable reference, the path *num only had the R permission. but later that num is a mutable reference, *num has also gained the W permission.
+
+7. Permissions Are Returned At The End of a Reference's Lifetime
+    - 
+    - after the last time you use a reference, the permissions of referenced path, will return
+
+
+8. Data Must Outlive All Of Its References
+    - its clear, you can reference something that doesn't exist
+    1. you can't drop a data with alive reference to it
+    2. in need F permission, and for that rust need to know which reference belong to which path (the example of function with two arguments where return a reference)
+        ```rust
+        fn first_or(first_str: &Vec<String>, second_str: &String) -> &String {
+            if first_str.len() > 0 {
+                &first_str[0]
+            } else {
+                second_str
+            }
+        } 
+        ```
+        this function is unsafe because rust don't know the returned value is a reference of first_str or second_str
+    
+    3. another example is when you create a variable inside a function and return a reference to it, 
+    the __reference which is returned will outlive its data__, since the variable will drop after the execution of the function
+
+
+<br>
+<hr/>
+<br>
+<br>
+<br>
+
+```rust
 fn main() {
 
     // 
@@ -266,3 +356,6 @@ fn main() {
     // after the function is executed there is no s anymore but s_ref is returned and will remain, so we are referencing to something doesn't exist
 
 }
+
+```
+
