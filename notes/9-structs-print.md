@@ -1,10 +1,9 @@
+```rust
 #[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
 }
-
-
 fn main() {
     let rect1 = Rectangle {
         width: 30,
@@ -18,3 +17,4 @@ fn main() {
     // println!("{}x{} {:?}", rect1.height, rect1.width, rect1);// we can NOT user rect1 after passing it to dbg! macro    
     
 }
+```
